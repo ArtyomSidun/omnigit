@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="this.step.one" class="col-md-6 offset-md-3">
+      <h1>Select currnet version control</h1>
+      <select class="custom-select" [(ngModel)]="selectedRepo">
+        <option *ngFor="let repo of gitRepos" [value]="repo.id">
+          {{repo.name}}
+        </option>
+      </select>
+      <a href="{{ gitRepos[selectedRepo].url }}">
+        <button type="button" class="btn btn-success">
+          Authorize
+        </button>
+      </a>
+    </div>
+    <div *ngIf="this.step.two" class="col-md-6 offset-md-3">
+      <h1>Select currnet repository</h1>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+        </div>
+        <input [(ngModel)]="repoName" type="text" class="form-control" aria-label="Sizing example input"
+          aria-describedby="inputGroup-sizing-default">
+      </div>
+    </div>
+    <div *ngIf="this.step.three" class="col-md-6 offset-md-3">
+      One of three columns
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
