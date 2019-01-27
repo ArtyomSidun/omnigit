@@ -1,27 +1,35 @@
 const request = require('superagent')
 const nodegit = require('nodegit')
-const path = require('path')
 const cmd = require('node-cmd')
 const fse = require('fs-extra')
-const tmpPath = '../../tmp'
+const tmpPath = '../tmp'
 
 class Git {
-  getAccessToken(url, data) {
-    return request.post(url).send(data).set('Accept', 'application/json')
+  getAccessToken(url, data, header, type) {
+    return request.post(url).send(data).set(header, type)
+    .then((date) => {
+      return date
+    })
+  }
+
+  getUserInfo(url) {
+    return request.get(url).then((date) => {
+      return date
+    })
   }
 
   async clone(url) {
     await fse.remove(tmpPath)
     return nodegit.Clone(url, tmpPath)
-      .done((blob) => {
-        return true
-      })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   async changeRemoteAddr(url) {
     return new Promise((resolve, reject) => {
       cmd.get(
-        `cd ../tmp
+        `cd ${tmpPath}
         git remote -v
         git remote set-url origin ${url}
         git remote -v
@@ -40,7 +48,7 @@ class Git {
     let repository
     let remote
     let oid
-    nodegit.Repository.open(path.resolve(__dirname, '../../tmp/.git'))
+    nodegit.Repository.open(`${tmpPath}/.git`)
       .then((repo) => {
         repository = repo
         return true
@@ -48,7 +56,7 @@ class Git {
       .then(() => {
         return repository.refreshIndex()
       })
-      .then(() => (index) {
+      .then((index) => {
         return index.writeTree()
       })
       .then((oidResult) => {
@@ -82,4 +90,4 @@ class Git {
   }
 }
 
-module.exports = new Git()
+module.exports = Git

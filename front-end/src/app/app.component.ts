@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
       {
         id: 0,
         name: 'GitHub',
-        url: 'https://github.com/login/oauth/authorize?client_id=c49323c1ab4dbf2ef975&redirect_uri=http://localhost:4200?repo=github&provider=target'
+        url: 'https://github.com/login/oauth/authorize?client_id=c49323c1ab4dbf2ef975&scope=repo'
       },
       {
         id: 1,
@@ -41,15 +41,33 @@ export class AppComponent implements OnInit {
         url: 'https://bitbucket.org/site/oauth2/authorize?client_id=uPYJ2b2sGp2CWQUhAf&response_type=code'
       }
     ]
+
     this.selectedRepo = 0
     this.route.queryParams.subscribe(params => {
       this.date = {
         repo: params.repo,
-        code: params.code,
+        code: params.code
       }
       if (params.repo && params.code) {
-        this.step.one = false
-        this.step.two = true
+        if (localStorage.getItem('step') === 'three') {
+          this.date.repoName = localStorage.getItem('repoName')
+          this.httpService.post('push_repo', this.date)
+          .subscribe(
+            (res) => {
+              if (res) {
+                localStorage.removeItem('step');
+                localStorage.removeItem('repoName');
+                window.location.reload()
+              }
+            },
+            (error) => {
+              console.log(error)
+            }
+          )
+        } else {
+          this.step.one = false
+          this.step.two = true
+        }
       }
     });
   }
@@ -58,8 +76,13 @@ export class AppComponent implements OnInit {
     this.date.repoName = this.repoName
     this.httpService.post('get_current_repo', this.date)
       .subscribe(
-        (result) => {
-          console.log(result)
+        (res) => {
+          if (res) {
+            localStorage.setItem('step', 'three');
+            localStorage.setItem('repoName', JSON.stringify(this.repoName))
+            this.step.two = false
+            this.step.three = true
+          }
         },
         (error) => {
           console.log(error)
