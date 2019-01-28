@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from './service/http.service'
-import { from } from 'rxjs';
+import { NotificationsService } from 'angular2-notifications'
 
 @Component({
   selector: 'app-root',
@@ -12,13 +12,15 @@ export class AppComponent implements OnInit {
   step
   gitRepos: Object[]
   selectedRepo
-  repoName: String
-  date
+  repoName
+  data
 
-  constructor(private route: ActivatedRoute, private httpService: HttpService) {
+  constructor(
+    private route: ActivatedRoute,
+    private httpService: HttpService,
+    private _service: NotificationsService) {
   }
-
-  ngOnInit() {
+  ngOnInit () {
     this.step = {
       one: true,
       two: false,
@@ -44,26 +46,36 @@ export class AppComponent implements OnInit {
 
     this.selectedRepo = 0
     this.route.queryParams.subscribe(params => {
-      this.date = {
-        repo: params.repo,
+      this.data = {
+        providerName: params.repo,
         code: params.code
       }
+
       if (params.repo && params.code) {
         if (localStorage.getItem('step') === 'three') {
-          this.date.repoName = localStorage.getItem('repoName')
-          this.httpService.post('push_repo', this.date)
-          .subscribe(
-            (res) => {
-              if (res) {
-                localStorage.removeItem('step');
-                localStorage.removeItem('repoName');
-                window.location.reload()
+          this.data.repoName = localStorage.getItem('repoName')
+          this.httpService.post('push_repo', this.data)
+            .subscribe(
+              (res) => {
+                if (res) {
+                  this.showSuccess('Successfully migrate')
+                  setTimeout(() => {
+                    localStorage.removeItem('step');
+                    localStorage.removeItem('repoName');
+                    window.location.href = '/'
+                  }, 1000)
+                }
+              },
+              (error) => {
+                console.log(error)
+                this.showError(error.error)
+                // setTimeout(() => {
+                //   localStorage.removeItem('step');
+                //   localStorage.removeItem('repoName');
+                //   window.location.href = '/'
+                // }, 3000)
               }
-            },
-            (error) => {
-              console.log(error)
-            }
-          )
+            )
         } else {
           this.step.one = false
           this.step.two = true
@@ -72,21 +84,44 @@ export class AppComponent implements OnInit {
     });
   }
 
-  sendData() {
-    this.date.repoName = this.repoName
-    this.httpService.post('get_current_repo', this.date)
+  sendData () {
+    this.data.repoName = this.repoName
+    this.httpService.post('get_current_repo', this.data)
       .subscribe(
         (res) => {
           if (res) {
             localStorage.setItem('step', 'three');
-            localStorage.setItem('repoName', JSON.stringify(this.repoName))
+            localStorage.setItem('repoName', this.repoName)
             this.step.two = false
             this.step.three = true
           }
         },
         (error) => {
           console.log(error)
+          this.showError(error.error)
+          // setTimeout(() => {
+          //   localStorage.removeItem('step');
+          //   localStorage.removeItem('repoName');
+          //   window.location.href = '/'
+          // }, 3000)
         }
       )
+  }
+
+  showError (error) {
+    this._service.error(error.name, error.message, {
+      timeOut: 3000,
+      showProgressBar: true,
+      pauseOnHover: false,
+      clickToClose: false
+    })
+  }
+  showSuccess (message) {
+    this._service.success('Success', message, {
+      timeOut: 3000,
+      showProgressBar: true,
+      pauseOnHover: false,
+      clickToClose: true
+    })
   }
 }

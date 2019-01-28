@@ -2,31 +2,40 @@ const request = require('superagent')
 const nodegit = require('nodegit')
 const cmd = require('node-cmd')
 const fse = require('fs-extra')
+const AppError = require('../AppError')
 const tmpPath = '../tmp'
 
 class Git {
-  getAccessToken(url, data, header, type) {
+  getAccessToken (url, data, header, type) {
     return request.post(url).send(data).set(header, type)
-    .then((date) => {
-      return date
-    })
+      .then((date) => {
+        return date
+      })
   }
 
-  getUserInfo(url) {
+  getUserInfo (url) {
     return request.get(url).then((date) => {
       return date
     })
   }
 
-  async clone(url) {
+  async clone (url) {
     await fse.remove(tmpPath)
-    return nodegit.Clone(url, tmpPath)
-    .catch((error) => {
-      console.log(error)
+    await nodegit.Clone(url, tmpPath).catch(() => {
+      console.log('#####################')
     })
+    await nodegit.Repository.open(`${tmpPath}/.git`)
+      .catch(() => {
+        throw new AppError({
+          name: 'CLONE_ERROR',
+          message: 'The repo not cloned',
+          status: 500
+        })
+      })
+    return true
   }
 
-  async changeRemoteAddr(url) {
+  async changeRemoteAddr (url) {
     return new Promise((resolve, reject) => {
       cmd.get(
         `cd ${tmpPath}
@@ -36,14 +45,14 @@ class Git {
         `,
         (err, data, stderr) => {
           if (err) {
-            reject(err)
+            throw new AppError(err)
           }
           resolve(data)
         })
     })
   }
 
-  async push(token, name) {
+  async push (token, name) {
     let signature = nodegit.Signature.now('OmniGit', 'omnigit@test.com')
     let repository
     let remote
@@ -77,15 +86,20 @@ class Git {
               ['refs/heads/master:refs/heads/master'],
               {
                 callbacks: {
-                  credentials: function (url, userName) {
+                  credentials: (url, userName) => {
                     return nodegit.Cred.userpassPlaintextNew(name, token)
                   }
                 }
               }
             )
           })
-      }).catch((err) => {
-        console.log(err)
+      }).catch((error) => {
+        console.log(error)
+        throw new AppError({
+          name: 'PUSH_ERROR',
+          message: 'The repo not pushed',
+          status: 500
+        })
       })
   }
 }

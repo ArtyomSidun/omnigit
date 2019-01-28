@@ -8,22 +8,22 @@
         </option>
       </select>
       <a href="{{ gitRepos[selectedRepo].url }}">
-        <button type="button" class="btn btn-success">
+        <button type="button" class="btn btn-success select-button">
           Authorize
         </button>
       </a>
     </div>
     <div *ngIf="this.step.two" class="col-md-6 offset-md-3">
-      <h1>Enter currnet repository name</h1>
+      <h1>Enter repository name</h1>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
         </div>
         <input [(ngModel)]="repoName" type="text" class="form-control" aria-label="Sizing example input"
-          aria-describedby="inputGroup-sizing-default">
-          <button type="button" class="btn btn-success"(click)="sendData()">
-            Select
-          </button>
+          aria-describedby="inputGroup-sizing-default" />
+        <button type="button" class="btn btn-success" (click)="sendData()">
+          Send
+        </button>
       </div>
     </div>
     <div *ngIf="this.step.three" class="col-md-6 offset-md-3">
@@ -33,12 +33,16 @@
           {{repo.name}}
         </option>
       </select>
+      <p style="font-size:12px">
+        On the target provider should exist empty repository with the same name as on currentprovider
+      </p>
       <a href="{{ gitRepos[selectedRepo].url }}">
-        <button type="button" class="btn btn-success">
+        <button type="button" class="btn btn-success select-button">
           Authorize
         </button>
       </a>
     </div>
   </div>
+  <simple-notifications></simple-notifications>
 </div>
 <router-outlet></router-outlet>
