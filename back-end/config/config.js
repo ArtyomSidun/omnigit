@@ -1,6 +1,6 @@
 module.exports = {
   server: {
-    port: 3001
+    port: process.env.PORT || 5000
   },
   gitHub: {
     client_id: 'c49323c1ab4dbf2ef975',

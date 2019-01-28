@@ -12,7 +12,7 @@ app.use((req, res, next) => {
 })
 
 app.use(bodyParser.json({ type: 'application/json' }))
-// app.use('', express.static('../front-end/dist/front-end'))
+app.use('', express.static('./dist/front-end'))
 app.use(router)
 
 app.use(AppError.handle404)
