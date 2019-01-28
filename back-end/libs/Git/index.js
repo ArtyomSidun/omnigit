@@ -22,16 +22,12 @@ class Git {
   async clone (url) {
     await fse.remove(tmpPath)
     await nodegit.Clone(url, tmpPath).catch(() => {
-      console.log('#####################')
-    })
-    await nodegit.Repository.open(`${tmpPath}/.git`)
-      .catch(() => {
-        throw new AppError({
-          name: 'CLONE_ERROR',
-          message: 'The repo not cloned',
-          status: 500
-        })
+      throw new AppError({
+        name: 'CLONE_ERROR',
+        message: 'The repo not cloned',
+        status: 500
       })
+    })
     return true
   }
 
