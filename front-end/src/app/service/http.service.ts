@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class HttpService {
-  private apiUrl = 'https://omnigit.herokuapp.com/'
+  private apiUrl = ''
 
   constructor(private http: HttpClient) { }
 
