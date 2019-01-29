@@ -53,7 +53,7 @@ class Git {
     let repository
     let remote
     let oid
-    nodegit.Repository.open(`${tmpPath}/.git`)
+    return nodegit.Repository.open(`${tmpPath}/.git`)
       .then((repo) => {
         repository = repo
         return true
@@ -90,7 +90,6 @@ class Git {
             )
           })
       }).catch((error) => {
-        console.log(error)
         throw new AppError({
           name: 'PUSH_ERROR',
           message: 'The repo not pushed',

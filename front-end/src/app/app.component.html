@@ -33,7 +33,7 @@
           {{repo.name}}
         </option>
       </select>
-      <p style="font-size:12px">
+      <p *ngIf="selectedRepo!=1" style="font-size:12px">
         On the target provider should exist empty repository with the same name as on currentprovider
       </p>
       <a href="{{ gitRepos[selectedRepo].url }}">

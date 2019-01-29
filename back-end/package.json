@@ -4,17 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
     "express": "^4.16.4",
     "express-validator": "^5.3.1",
     "fs-extra": "^7.0.1",
     "node-cmd": "^3.0.0",
     "nodegit": "^0.24.0",
     "superagent": "^4.1.0"
+  },
+  "devDependencies": {
+    "express-swagger-generator": "^1.1.11",
+    "mocha": "^5.2.0"
   }
 }

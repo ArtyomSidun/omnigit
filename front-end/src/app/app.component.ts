@@ -67,13 +67,12 @@ export class AppComponent implements OnInit {
                 }
               },
               (error) => {
-                console.log(error)
                 this.showError(error.error)
-                // setTimeout(() => {
-                //   localStorage.removeItem('step');
-                //   localStorage.removeItem('repoName');
-                //   window.location.href = '/'
-                // }, 3000)
+                setTimeout(() => {
+                  localStorage.removeItem('step');
+                  localStorage.removeItem('repoName');
+                  window.location.href = '/'
+                }, 2000)
               }
             )
         } else {
@@ -97,20 +96,19 @@ export class AppComponent implements OnInit {
           }
         },
         (error) => {
-          console.log(error)
           this.showError(error.error)
-          // setTimeout(() => {
-          //   localStorage.removeItem('step');
-          //   localStorage.removeItem('repoName');
-          //   window.location.href = '/'
-          // }, 3000)
+          setTimeout(() => {
+            localStorage.removeItem('step');
+            localStorage.removeItem('repoName');
+            window.location.href = '/'
+          }, 2000)
         }
       )
   }
 
   showError (error) {
     this._service.error(error.name, error.message, {
-      timeOut: 3000,
+      timeOut: 2000,
       showProgressBar: true,
       pauseOnHover: false,
       clickToClose: false

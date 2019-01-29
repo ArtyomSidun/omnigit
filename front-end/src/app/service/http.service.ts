@@ -5,11 +5,11 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class HttpService {
-  private apiUrl = 'http://localhost:3001/'
+  private apiUrl = 'https://omnigit.herokuapp.com/'
 
   constructor(private http: HttpClient) { }
 
-  post(url, data) {
+  post (url, data) {
     return this.http.post(this.apiUrl + url, data)
   }
 }

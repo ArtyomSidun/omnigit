@@ -41,7 +41,7 @@ m.pushRepo = async (req, res, next) => {
     const provider = providerMaper(providerName)
     const accessToken = await provider.getAccessToken(code)
     const username = await provider.getUserName(accessToken)
-    provider.push({ name: username, token: accessToken }, repoName)
+    await provider.push({ name: username, token: accessToken }, repoName)
     res.json(true)
   } catch (err) {
     next(err)

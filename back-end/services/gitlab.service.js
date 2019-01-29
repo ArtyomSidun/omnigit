@@ -1,3 +1,4 @@
+const cmd = require('node-cmd')
 const Git = require('../libs/Git')
 const config = require('../config/config')
 
@@ -23,7 +24,7 @@ class Gitlab extends Git {
   }
 
   async push (user, repoName) {
-    await super.changeRemoteAddr(`https://oauth2:${user}@gitlab.com/${user.name}/${repoName}.git`)
+    await super.changeRemoteAddr(`https://oauth2:${user.token}@gitlab.com/${user.name}/${repoName}.git`)
     await super.push(user.token, user.name)
   }
 }
