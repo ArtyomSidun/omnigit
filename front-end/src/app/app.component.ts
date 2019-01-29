@@ -35,12 +35,12 @@ export class AppComponent implements OnInit {
       {
         id: 1,
         name: 'GitLab',
-        url: 'https://gitlab.com/oauth/authorize?client_id=d4388c1e51bf2d39390df722ad1479e585e7e080014da165977fe379b1f32124&response_type=code&redirect_uri=http://localhost:4200?repo=gitlab'
+        url: 'https://gitlab.com/oauth/authorize?client_id=d4388c1e51bf2d39390df722ad1479e585e7e080014da165977fe379b1f32124&response_type=code&redirect_uri=https://omnigit.herokuapp.com/?repo=gitlab'
       },
       {
         id: 2,
         name: 'Bitbucket',
-        url: 'https://bitbucket.org/site/oauth2/authorize?client_id=uPYJ2b2sGp2CWQUhAf&response_type=code'
+        url: 'https://bitbucket.org/site/oauth2/authorize?client_id=2VQjjTrmsrytyFRAYV&response_type=code'
       }
     ]
 

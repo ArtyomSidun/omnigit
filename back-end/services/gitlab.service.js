@@ -9,7 +9,7 @@ class Gitlab extends Git {
       client_secret: config.gitLab.client_secret,
       grant_type: 'authorization_code',
       code: code,
-      redirect_uri: 'http://localhost:4200?repo=gitlab'
+      redirect_uri: 'https://omnigit.herokuapp.com?repo=gitlab'
     }, 'content-type', 'application/x-www-form-urlencoded')
     return JSON.parse(info.text).access_token
   }

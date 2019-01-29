@@ -3,7 +3,7 @@ const nodegit = require('nodegit')
 const cmd = require('node-cmd')
 const fse = require('fs-extra')
 const AppError = require('../AppError')
-const tmpPath = '../tmp'
+const tmpPath = './tmp'
 
 class Git {
   getAccessToken (url, data, header, type) {
